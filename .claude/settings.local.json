@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth:*)",
+      "Bash(netlify --version)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(mkdir -p ~/.ssh)",
+      "Bash(ssh-keyscan github.com)",
+      "Bash(~/.ssh/known_hosts)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
