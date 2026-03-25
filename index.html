@@ -741,6 +741,11 @@
 
 </div><!-- /shell -->
 
+<!-- Hidden form for Netlify Forms detection -->
+<form name="diagnostic-leads" data-netlify="true" hidden>
+  <input type="email" name="email">
+</form>
+
 <script>
 // ══════════════════════════════════════════════════════
 // QUESTIONS
@@ -983,6 +988,14 @@ function submitEmail() {
     return;
   }
   userEmail = email;
+
+  // Fire-and-forget: capture email in Netlify Forms
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ 'form-name': 'diagnostic-leads', email }).toString()
+  }).catch(err => console.warn('Form capture error:', err));
+
   show('screen-loading');
   runLoadingSequence();
   generateReport();
