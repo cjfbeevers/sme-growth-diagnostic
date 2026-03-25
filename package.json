@@ -1,0 +1,8 @@
+{
+  "name": "sme-growth-diagnostic",
+  "version": "1.0.0",
+  "description": "SME Growth Diagnostic by Traction Studio",
+  "engines": {
+    "node": "18"
+  }
+}

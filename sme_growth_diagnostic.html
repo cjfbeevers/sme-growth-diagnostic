@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SME Growth Diagnostic — Traction Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f0e0c;
+    --ink-mid: #4a4843;
+    --ink-soft: #9a9690;
+    --paper: #faf9f6;
+    --paper-warm: #f2f0ea;
+    --paper-mid: #e8e5dc;
+    --accent: #c84b2f;
+    --accent-soft: #f0e8e4;
+    --success: #2a6b4a;
+    --success-soft: #e4f0ea;
+    --warn: #b07020;
+    --warn-soft: #f5eed8;
+    --border: rgba(15,14,12,0.12);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --radius: 4px;
+    --radius-lg: 10px;
+  }
+
+  html { font-size: 16px; }
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* ── LAYOUT ── */
+  .shell {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 32px 0 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 52px;
+  }
+  .wordmark {
+    font-family: var(--serif);
+    font-size: 17px;
+    letter-spacing: 0.02em;
+    color: var(--ink-mid);
+  }
+  .wordmark span { color: var(--accent); }
+
+  /* ── HERO ── */
+  #screen-intro { animation: fadein 0.5s ease both; }
+  .hero-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 6vw, 54px);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 22px;
+    font-weight: 400;
+  }
+  h1 em { font-style: italic; color: var(--accent); }
+  .hero-body {
+    font-size: 17px;
+    color: var(--ink-mid);
+    max-width: 520px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+
+  /* ── PILLARS ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .pillar {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+  }
+  .pillar-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    color: var(--paper-mid);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .pillar-name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+  .pillar-desc {
+    font-size: 11px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius);
+    padding: 14px 28px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    letter-spacing: 0.01em;
+  }
+  .btn-primary:hover { background: #2a2820; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary .arrow { transition: transform 0.2s; }
+  .btn-primary:hover .arrow { transform: translateX(3px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--ink-mid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 11px 20px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--ink-mid); color: var(--ink); }
+
+  /* ── QUIZ ── */
+  #screen-quiz { animation: fadein 0.4s ease both; }
+  .progress-bar {
+    height: 2px;
+    background: var(--paper-mid);
+    border-radius: 2px;
+    margin-bottom: 44px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--ink);
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+  .question-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .q-section {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .q-counter {
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .question-text {
+    font-family: var(--serif);
+    font-size: clamp(20px, 3.5vw, 26px);
+    line-height: 1.35;
+    color: var(--ink);
+    margin-bottom: 28px;
+    font-weight: 400;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 18px;
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    text-align: left;
+    font-family: var(--sans);
+    color: var(--ink);
+  }
+  .option:hover { border-color: var(--ink-mid); background: var(--paper); transform: translateX(2px); }
+  .option.selected { border-color: var(--ink); background: var(--paper); }
+  .option.selected .opt-radio { background: var(--ink); border-color: var(--ink); }
+  .option.selected .opt-radio::after { opacity: 1; }
+  .opt-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid var(--paper-mid);
+    background: var(--paper);
+    flex-shrink: 0;
+    margin-top: 1px;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .opt-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--paper);
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .opt-label {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .opt-sublabel {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-top: 2px;
+  }
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ── EMAIL GATE ── */
+  #screen-email { animation: fadein 0.4s ease both; }
+  .email-card {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 44px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .email-icon {
+    width: 52px;
+    height: 52px;
+    background: var(--ink);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 22px;
+    color: var(--paper);
+    font-size: 22px;
+  }
+  .email-card h2 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    margin-bottom: 12px;
+  }
+  .email-card p {
+    font-size: 15px;
+    color: var(--ink-mid);
+    margin-bottom: 28px;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .email-input-row {
+    display: flex;
+    gap: 8px;
+    max-width: 400px;
+    margin: 0 auto 12px;
+  }
+  .email-input-row input {
+    flex: 1;
+    padding: 13px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 14px;
+    background: var(--paper);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .email-input-row input:focus { border-color: var(--ink-mid); }
+  .email-small {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+
+  /* ── LOADING ── */
+  #screen-loading { animation: fadein 0.4s ease both; text-align: center; padding: 80px 0; }
+  .loading-label {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .loading-sub {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 44px;
+  }
+  .loading-steps {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: left;
+  }
+  .loading-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--ink-soft);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.4s, transform 0.4s, color 0.3s;
+  }
+  .loading-step.visible { opacity: 1; transform: translateY(0); }
+  .loading-step.done { color: var(--success); }
+  .step-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--paper-mid);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .loading-step.done .step-dot { background: var(--success); }
+  .loading-step.active .step-dot { background: var(--accent); animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── RESULTS ── */
+  #screen-results { animation: fadein 0.5s ease both; }
+  .results-header {
+    padding: 44px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 44px;
+  }
+  .results-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .results-name {
+    font-family: var(--serif);
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .results-name em { font-style: italic; color: var(--accent); }
+
+  /* Scores */
+  .scores-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 44px;
+  }
+  .score-card {
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .score-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .score-card.red::before { background: var(--accent); }
+  .score-card.amber::before { background: var(--warn); }
+  .score-card.green::before { background: var(--success); }
+  .score-pillar {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+  .score-number {
+    font-family: var(--serif);
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-number.red { color: var(--accent); }
+  .score-number.amber { color: var(--warn); }
+  .score-number.green { color: var(--success); }
+  .score-label { font-size: 12px; color: var(--ink-mid); }
+  .score-bar-track {
+    height: 3px;
+    background: var(--paper-mid);
+    border-radius: 3px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    width: 0;
+    transition: width 1s cubic-bezier(.4,0,.2,1) 0.3s;
+  }
+  .score-bar-fill.red { background: var(--accent); }
+  .score-bar-fill.amber { background: var(--warn); }
+  .score-bar-fill.green { background: var(--success); }
+
+  /* Report content */
+  .report-section {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+  .report-section:last-of-type { border-bottom: none; }
+  .report-section-title {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 14px;
+  }
+  .report-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--ink-mid);
+  }
+  .report-body p { margin-bottom: 14px; }
+  .report-body p:last-child { margin-bottom: 0; }
+  .report-body strong { color: var(--ink); font-weight: 500; }
+
+  /* Priority actions */
+  .actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .action-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    background: var(--paper-warm);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+  .action-num {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 24px;
+  }
+  .action-text { font-size: 14px; color: var(--ink); line-height: 1.55; }
+  .action-text strong { font-weight: 500; display: block; margin-bottom: 2px; }
+  .action-text span { color: var(--ink-mid); }
+
+  /* Community CTA */
+  .community-cta {
+    background: var(--ink);
+    border-radius: 12px;
+    padding: 44px;
+    text-align: center;
+    margin: 52px 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .community-cta::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(200,75,47,0.12);
+  }
+  .cta-eyebrow {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(250,249,246,0.5);
+    margin-bottom: 14px;
+  }
+  .cta-headline {
+    font-family: var(--serif);
+    font-size: clamp(24px, 4vw, 34px);
+    color: var(--paper);
+    font-weight: 400;
+    margin-bottom: 14px;
+    line-height: 1.2;
+  }
+  .cta-headline em { font-style: italic; color: #e8a090; }
+  .cta-body {
+    font-size: 14px;
+    color: rgba(250,249,246,0.65);
+    max-width: 420px;
+    margin: 0 auto 28px;
+    line-height: 1.65;
+  }
+  .cta-perks {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .cta-perk {
+    font-size: 12px;
+    color: rgba(250,249,246,0.55);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .cta-perk::before { content: '✓'; color: #e8a090; }
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: var(--paper);
+    border: none;
+    border-radius: var(--radius);
+    padding: 15px 32px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    text-decoration: none;
+  }
+  .btn-cta:hover { background: #b03d24; transform: translateY(-1px); }
+
+  /* Streaming text effect */
+  .streaming { display: inline; }
+
+  /* Utilities */
+  .hidden { display: none !important; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 560px) {
+    .pillars { grid-template-columns: 1fr; }
+    .scores-grid { grid-template-columns: 1fr; }
+    .email-card { padding: 28px 20px; }
+    .email-input-row { flex-direction: column; }
+    .community-cta { padding: 32px 20px; }
+    .cta-perks { flex-direction: column; align-items: center; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <header>
+    <div class="wordmark">Traction<span>.</span>Studio</div>
+  </header>
+
+  <!-- ══ SCREEN 1: INTRO ══ -->
+  <div id="screen-intro">
+    <p class="hero-eyebrow">Free Commercial Diagnostic</p>
+    <h1>How strong is your<br><em>commercial engine?</em></h1>
+    <p class="hero-body">Answer 15 questions about your business. Our AI analyses your responses across three pillars and returns a personalised growth report — in under 60 seconds.</p>
+
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-name">Positioning</div>
+        <div class="pillar-desc">How clearly buyers understand your value</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-name">Pricing</div>
+        <div class="pillar-desc">How well you capture the value you create</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-name">Sales process</div>
+        <div class="pillar-desc">How consistently you convert pipeline to revenue</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startQuiz()">
+      Start the diagnostic
+      <span class="arrow">→</span>
+    </button>
+  </div>
+
+  <!-- ══ SCREEN 2: QUIZ ══ -->
+  <div id="screen-quiz" class="hidden">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="question-meta">
+      <span class="q-section" id="q-section"></span>
+      <span class="q-counter" id="q-counter"></span>
+    </div>
+    <p class="question-text" id="q-text"></p>
+    <div class="options" id="q-options"></div>
+    <div class="quiz-nav">
+      <button class="btn-secondary" id="btn-back" onclick="goBack()">← Back</button>
+      <button class="btn-primary" id="btn-next" onclick="goNext()" disabled>
+        Continue <span class="arrow">→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 3: EMAIL ══ -->
+  <div id="screen-email" class="hidden">
+    <div class="email-card">
+      <div class="email-icon">✦</div>
+      <h2>Your report is ready.</h2>
+      <p>Enter your email to receive your full diagnostic — including your scores, analysis, and priority actions.</p>
+      <div class="email-input-row">
+        <input type="email" id="email-input" placeholder="you@company.com" onkeydown="if(event.key==='Enter')submitEmail()">
+        <button class="btn-primary" onclick="submitEmail()">Get my report <span class="arrow">→</span></button>
+      </div>
+      <p class="email-small">No spam. One report. Unsubscribe anytime.</p>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 4: LOADING ══ -->
+  <div id="screen-loading" class="hidden">
+    <p class="loading-label">Analysing your business…</p>
+    <p class="loading-sub">Claude is working through your responses</p>
+    <div class="loading-steps">
+      <div class="loading-step" id="ls-1"><span class="step-dot"></span>Reading your positioning signals</div>
+      <div class="loading-step" id="ls-2"><span class="step-dot"></span>Evaluating pricing confidence</div>
+      <div class="loading-step" id="ls-3"><span class="step-dot"></span>Auditing your sales process</div>
+      <div class="loading-step" id="ls-4"><span class="step-dot"></span>Scoring each pillar</div>
+      <div class="loading-step" id="ls-5"><span class="step-dot"></span>Building your action plan</div>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 5: RESULTS ══ -->
+  <div id="screen-results" class="hidden">
+
+    <div class="results-header">
+      <p class="results-eyebrow">Your Traction Studio Diagnostic</p>
+      <h2 class="results-name" id="results-headline">Your commercial engine has <em>real potential</em></h2>
+    </div>
+
+    <!-- Score cards -->
+    <div class="scores-grid" id="scores-grid">
+      <div class="score-card" id="sc-positioning">
+        <div class="score-pillar">Positioning</div>
+        <div class="score-number" id="sn-positioning">—</div>
+        <div class="score-label" id="sl-positioning">Analysing…</div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sb-positioning"></div></div>
+      </div>
+      <div class="score-card" id="sc-pricing">
+        <div class="score-pillar">Pricing</div>
+        <div class="score-number" id="sn-pricing">—</div>
+        <div class="score-label" id="sl-pricing">Analysing…</div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sb-pricing"></div></div>
+      </div>
+      <div class="score-card" id="sc-sales">
+        <div class="score-pillar">Sales process</div>
+        <div class="score-number" id="sn-sales">—</div>
+        <div class="score-label" id="sl-sales">Analysing…</div>
+        <div class="score-bar-track"><div class="score-bar-fill" id="sb-sales"></div></div>
+      </div>
+    </div>
+
+    <!-- Detailed report -->
+    <div class="report-section">
+      <div class="report-section-title">Your diagnosis</div>
+      <div class="report-body" id="report-diagnosis"></div>
+    </div>
+
+    <div class="report-section">
+      <div class="report-section-title">Your biggest commercial blocker</div>
+      <div class="report-body" id="report-blocker"></div>
+    </div>
+
+    <div class="report-section">
+      <div class="report-section-title">Priority actions for the next 30 days</div>
+      <div class="actions-list" id="report-actions"></div>
+    </div>
+
+    <!-- Community CTA -->
+    <div class="community-cta">
+      <p class="cta-eyebrow">Traction Studio Community</p>
+      <h3 class="cta-headline">Don't fix this alone.<br><em>Join founders doing the work.</em></h3>
+      <p class="cta-body">Our private community gives you accountability partners, live strategy sessions, and a library of resources built around exactly the blockers this diagnostic surfaces.</p>
+      <div class="cta-perks">
+        <span class="cta-perk">Weekly live sessions</span>
+        <span class="cta-perk">Peer accountability groups</span>
+        <span class="cta-perk">Full resource library</span>
+        <span class="cta-perk">Direct strategy support</span>
+      </div>
+      <a href="#" class="btn-cta">Join the community →</a>
+    </div>
+
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+// ══════════════════════════════════════════════════════
+// QUESTIONS
+// ══════════════════════════════════════════════════════
+const QUESTIONS = [
+  // POSITIONING (Q1–5)
+  {
+    section: "Positioning",
+    text: "If a potential customer asked 'why should I choose you over your competitors?', how would you describe your answer?",
+    options: [
+      { label: "We're better quality and more reliable", sub: "A common answer — but hard to prove quickly" },
+      { label: "We're more affordable or better value", sub: "Price-led positioning" },
+      { label: "We specialise in a specific type of customer or problem", sub: "Niche-led positioning" },
+      { label: "We have a clearly distinct method or outcome others can't replicate", sub: "Strong differentiation" }
+    ]
+  },
+  {
+    section: "Positioning",
+    text: "How clearly does your website communicate who your ideal customer is and what specific problem you solve?",
+    options: [
+      { label: "It describes what we do but doesn't speak to a specific customer", sub: "" },
+      { label: "It mentions our services and features in detail", sub: "" },
+      { label: "It speaks directly to a specific type of buyer and their problem", sub: "" },
+      { label: "We don't have a website or it's out of date", sub: "" }
+    ]
+  },
+  {
+    section: "Positioning",
+    text: "When your best customers recommend you, what do they typically say?",
+    options: [
+      { label: "They're really helpful and responsive", sub: "Service-led reputation" },
+      { label: "They're good value for money", sub: "Price-led reputation" },
+      { label: "They specialise in exactly what we needed", sub: "Niche-led reputation" },
+      { label: "I'm not sure — I rarely hear how they describe us", sub: "Unclear external positioning" }
+    ]
+  },
+  {
+    section: "Positioning",
+    text: "How consistent is your messaging across your website, proposals, and sales conversations?",
+    options: [
+      { label: "Each is written separately and tells a slightly different story", sub: "" },
+      { label: "Broadly similar but not deliberately aligned", sub: "" },
+      { label: "Consistent — all channels follow the same positioning", sub: "" },
+      { label: "We don't have a defined positioning to be consistent with", sub: "" }
+    ]
+  },
+  {
+    section: "Positioning",
+    text: "How often do prospects say they chose you because you were the obvious right fit for their situation?",
+    options: [
+      { label: "Rarely — they usually just say we seemed good", sub: "" },
+      { label: "Sometimes, but they often compare us heavily on price", sub: "" },
+      { label: "Often — we attract well-matched clients consistently", sub: "" },
+      { label: "Never tracked this", sub: "" }
+    ]
+  },
+
+  // PRICING (Q6–10)
+  {
+    section: "Pricing",
+    text: "How do you currently set your prices?",
+    options: [
+      { label: "Based on what it costs me to deliver plus a margin", sub: "Cost-plus pricing" },
+      { label: "Based on what competitors charge", sub: "Market-rate pricing" },
+      { label: "Based on the value or outcome it creates for the customer", sub: "Value-based pricing" },
+      { label: "Based on what feels right or what clients have accepted before", sub: "Intuition-based pricing" }
+    ]
+  },
+  {
+    section: "Pricing",
+    text: "When a prospect pushes back on your price, what typically happens?",
+    options: [
+      { label: "I usually offer a discount to close the deal", sub: "Margin erosion risk" },
+      { label: "I explain the value and hold the price — sometimes it works", sub: "Inconsistent defence" },
+      { label: "I confidently articulate the ROI and rarely need to discount", sub: "Strong pricing discipline" },
+      { label: "It's rare — most accept our pricing without negotiation", sub: "" }
+    ]
+  },
+  {
+    section: "Pricing",
+    text: "Do you offer tiered pricing or packages at different price points?",
+    options: [
+      { label: "No — we quote everything individually", sub: "" },
+      { label: "We have a few options but they're not clearly structured", sub: "" },
+      { label: "Yes — we have clear tiers that meet different buyer needs", sub: "" },
+      { label: "We have one standard offer with no variation", sub: "" }
+    ]
+  },
+  {
+    section: "Pricing",
+    text: "How confident are you that your current pricing reflects the full value you create?",
+    options: [
+      { label: "Not confident — I suspect we're leaving money on the table", sub: "" },
+      { label: "Somewhat confident but I've never properly tested it", sub: "" },
+      { label: "Confident — we've validated our pricing with customers", sub: "" },
+      { label: "I don't know how to measure the value we create", sub: "" }
+    ]
+  },
+  {
+    section: "Pricing",
+    text: "When did you last increase your prices?",
+    options: [
+      { label: "Never — I'm worried about losing customers", sub: "" },
+      { label: "More than 2 years ago", sub: "" },
+      { label: "Within the last 12 months", sub: "" },
+      { label: "We review and adjust annually", sub: "" }
+    ]
+  },
+
+  // SALES PROCESS (Q11–15)
+  {
+    section: "Sales process",
+    text: "How would you describe your current approach to winning new business?",
+    options: [
+      { label: "Mostly reactive — we respond to enquiries as they come in", sub: "" },
+      { label: "A mix of referrals and occasional outreach with no clear process", sub: "" },
+      { label: "A defined process from first contact through to close", sub: "" },
+      { label: "We rely almost entirely on word of mouth", sub: "" }
+    ]
+  },
+  {
+    section: "Sales process",
+    text: "How much visibility do you have over your pipeline right now?",
+    options: [
+      { label: "Very little — I have a rough sense but no structured tracking", sub: "" },
+      { label: "I track active conversations informally", sub: "" },
+      { label: "I have a pipeline tracker with stages and expected close dates", sub: "" },
+      { label: "I don't have any active pipeline to speak of", sub: "" }
+    ]
+  },
+  {
+    section: "Sales process",
+    text: "What typically happens after you send a proposal?",
+    options: [
+      { label: "I send it and wait — many go quiet without a response", sub: "" },
+      { label: "I follow up once or twice but don't have a structured approach", sub: "" },
+      { label: "I schedule a review call before sending and follow a clear next-steps process", sub: "" },
+      { label: "I rarely send formal proposals", sub: "" }
+    ]
+  },
+  {
+    section: "Sales process",
+    text: "How consistent is your monthly revenue?",
+    options: [
+      { label: "Very inconsistent — it varies significantly month to month", sub: "" },
+      { label: "Somewhat predictable but with noticeable gaps", sub: "" },
+      { label: "Fairly consistent — I have a clear view of forward revenue", sub: "" },
+      { label: "Growing steadily month on month", sub: "" }
+    ]
+  },
+  {
+    section: "Sales process",
+    text: "How would you describe your close rate on qualified opportunities?",
+    options: [
+      { label: "Low — under 20% of interested prospects convert", sub: "" },
+      { label: "Moderate — around 20–40%", sub: "" },
+      { label: "Good — 40–60% of qualified leads convert", sub: "" },
+      { label: "Strong — over 60% of qualified conversations convert", sub: "" }
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════
+let currentQ = 0;
+let answers = [];
+let userEmail = '';
+
+// ══════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════
+function show(id) {
+  ['screen-intro','screen-quiz','screen-email','screen-loading','screen-results'].forEach(s => {
+    document.getElementById(s).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startQuiz() {
+  currentQ = 0;
+  answers = [];
+  show('screen-quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[currentQ];
+  const total = QUESTIONS.length;
+  document.getElementById('progress-fill').style.width = ((currentQ / total) * 100) + '%';
+  document.getElementById('q-section').textContent = q.section;
+  document.getElementById('q-counter').textContent = `${currentQ + 1} of ${total}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').disabled = answers[currentQ] === undefined;
+
+  const opts = document.getElementById('q-options');
+  opts.innerHTML = '';
+  q.options.forEach((o, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option' + (answers[currentQ] === i ? ' selected' : '');
+    btn.innerHTML = `<span class="opt-radio"></span>
+      <span>
+        <span class="opt-label">${o.label}</span>
+        ${o.sub ? `<span class="opt-sublabel">${o.sub}</span>` : ''}
+      </span>`;
+    btn.onclick = () => selectAnswer(i);
+    opts.appendChild(btn);
+  });
+}
+
+function selectAnswer(i) {
+  answers[currentQ] = i;
+  document.querySelectorAll('.option').forEach((o, idx) => {
+    o.classList.toggle('selected', idx === i);
+    o.querySelector('.opt-radio').classList.toggle('selected', idx === i);
+  });
+  document.getElementById('btn-next').disabled = false;
+}
+
+function goNext() {
+  if (answers[currentQ] === undefined) return;
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    renderQuestion();
+  } else {
+    show('screen-email');
+  }
+}
+
+function goBack() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function submitEmail() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('email-input').style.borderColor = 'var(--accent)';
+    return;
+  }
+  userEmail = email;
+  show('screen-loading');
+  runLoadingSequence();
+  generateReport();
+}
+
+// ══════════════════════════════════════════════════════
+// LOADING SEQUENCE
+// ══════════════════════════════════════════════════════
+function runLoadingSequence() {
+  const steps = [1,2,3,4,5];
+  const delays = [0, 800, 1600, 2800, 3800];
+  steps.forEach((n, i) => {
+    setTimeout(() => {
+      const el = document.getElementById('ls-' + n);
+      el.classList.add('visible', 'active');
+      if (i > 0) {
+        const prev = document.getElementById('ls-' + steps[i-1]);
+        prev.classList.remove('active');
+        prev.classList.add('done');
+      }
+    }, delays[i]);
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// CLAUDE API CALL
+// ══════════════════════════════════════════════════════
+async function generateReport() {
+  // Build answer summary for Claude
+  const summary = QUESTIONS.map((q, i) => {
+    const ans = answers[i] !== undefined ? q.options[answers[i]].label : 'Not answered';
+    return `Q${i+1} [${q.section}]: ${q.text}\nAnswer: ${ans}`;
+  }).join('\n\n');
+
+  const prompt = `You are a commercial strategy expert at Traction Studio analysing an SME founder's diagnostic responses. Based on their answers, produce a structured JSON report.
+
+FOUNDER RESPONSES:
+${summary}
+
+Return ONLY valid JSON in this exact structure, no markdown, no explanation:
+{
+  "headline": "A one-line summary (max 8 words) describing the commercial situation with an honest but motivating tone",
+  "scores": {
+    "positioning": { "score": <0-100>, "label": "<2-3 word status e.g. Needs focus>", "color": "<red|amber|green>" },
+    "pricing": { "score": <0-100>, "label": "<2-3 word status>", "color": "<red|amber|green>" },
+    "sales": { "score": <0-100>, "label": "<2-3 word status>", "color": "<red|amber|green>" }
+  },
+  "diagnosis": "<3-4 sentences. Specific, honest analysis of where this business is commercially. Name what's working and what isn't. Use second person (you/your). Reference their actual answers.>",
+  "blocker": "<2-3 sentences. Identify the single biggest commercial constraint holding back growth right now, and why it's the primary bottleneck. Be direct and specific.>",
+  "actions": [
+    { "title": "<Short action title>", "detail": "<Specific, actionable next step they can take in the next 30 days. One sentence.>" },
+    { "title": "<Short action title>", "detail": "<Specific, actionable next step. One sentence.>" },
+    { "title": "<Short action title>", "detail": "<Specific, actionable next step. One sentence.>" }
+  ]
+}
+
+Score calibration: 0-40 = red (needs urgent focus), 41-65 = amber (developing), 66-100 = green (performing well). Be honest — most SMEs will score in the 30-60 range. Do not give artificially high scores.`;
+
+  try {
+    const response = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content.map(c => c.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const report = JSON.parse(clean);
+    renderResults(report);
+
+  } catch (err) {
+    console.error('Report generation error:', err);
+    // Fallback report if API fails
+    renderResults(getFallbackReport());
+  }
+}
+
+function getFallbackReport() {
+  const posScore = calcScore([0,1,2,3,4]);
+  const priScore = calcScore([5,6,7,8,9]);
+  const salScore = calcScore([10,11,12,13,14]);
+  return {
+    headline: "Strong foundations, clear growth opportunities",
+    scores: {
+      positioning: { score: posScore, label: posScore < 40 ? "Needs focus" : posScore < 65 ? "Developing" : "Performing", color: posScore < 40 ? "red" : posScore < 65 ? "amber" : "green" },
+      pricing: { score: priScore, label: priScore < 40 ? "Needs focus" : priScore < 65 ? "Developing" : "Performing", color: priScore < 40 ? "red" : priScore < 65 ? "amber" : "green" },
+      sales: { score: salScore, label: salScore < 40 ? "Needs focus" : salScore < 65 ? "Developing" : "Performing", color: salScore < 40 ? "red" : salScore < 65 ? "amber" : "green" }
+    },
+    diagnosis: "<p>Your responses point to a business with genuine commercial potential that is being held back by unclear differentiation and an inconsistent sales process. You are likely winning business through relationships and quality of work, but struggling to create a repeatable growth engine that doesn't depend entirely on you.</p><p>The good news: the foundations are there. What's missing is the commercial architecture to scale them.</p>",
+    blocker: "<p>Your primary blocker is <strong>positioning clarity</strong>. Without a sharp, specific reason why you are the right choice for a defined type of customer, every sales conversation starts from scratch — and you'll continue to compete on price rather than fit.</p>",
+    actions: [
+      { title: "Write your positioning statement", detail: "Complete the four-part positioning formula from the Growth Playbook: define your target customer, their specific problem, your outcome-led solution, and what makes you different from alternatives." },
+      { title: "Build a basic pipeline tracker", detail: "Create a simple spreadsheet with seven columns: company, stage, deal value, last action, next action, probability, and expected close date. Review it every Monday morning." },
+      { title: "Run a value ladder exercise on your core offer", detail: "Map your main product or service from feature to benefit to outcome to economic value, then compare that value to your current price to identify your pricing confidence gap." }
+    ]
+  };
+}
+
+function calcScore(indices) {
+  const scores = [25, 40, 75, 50]; // rough score per option index
+  const avg = indices.reduce((sum, qi) => {
+    return sum + (answers[qi] !== undefined ? scores[answers[qi]] || 40 : 40);
+  }, 0) / indices.length;
+  return Math.round(avg);
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER RESULTS
+// ══════════════════════════════════════════════════════
+function renderResults(report) {
+  // Wait for loading to feel meaningful (min 5s)
+  const minWait = 5000;
+  const elapsed = Date.now() - loadStart;
+  setTimeout(() => {
+    show('screen-results');
+    applyReport(report);
+  }, Math.max(0, minWait - elapsed));
+}
+
+let loadStart = Date.now();
+
+function applyReport(report) {
+  loadStart = Date.now();
+
+  // Headline
+  const parts = report.headline.split(/\s+/);
+  const mid = Math.floor(parts.length / 2);
+  const first = parts.slice(0, mid).join(' ');
+  const second = parts.slice(mid).join(' ');
+  document.getElementById('results-headline').innerHTML = `${first} <em>${second}</em>`;
+
+  // Scores
+  ['positioning', 'pricing', 'sales'].forEach(pillar => {
+    const s = report.scores[pillar];
+    const color = s.color;
+    const card = document.getElementById('sc-' + pillar);
+    card.classList.add(color);
+    const numEl = document.getElementById('sn-' + pillar);
+    numEl.className = 'score-number ' + color;
+    const fill = document.getElementById('sb-' + pillar);
+    fill.classList.add(color);
+    document.getElementById('sl-' + pillar).textContent = s.label;
+
+    // Animate score count up
+    let start = 0;
+    const target = s.score;
+    const duration = 1000;
+    const step = 16;
+    const increment = target / (duration / step);
+    const interval = setInterval(() => {
+      start = Math.min(start + increment, target);
+      numEl.textContent = Math.round(start);
+      if (start >= target) clearInterval(interval);
+    }, step);
+
+    setTimeout(() => { fill.style.width = s.score + '%'; }, 100);
+  });
+
+  // Diagnosis
+  const diagEl = document.getElementById('report-diagnosis');
+  diagEl.innerHTML = report.diagnosis.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+
+  // Blocker
+  const blockEl = document.getElementById('report-blocker');
+  blockEl.innerHTML = report.blocker.split('\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('');
+
+  // Actions
+  const actEl = document.getElementById('report-actions');
+  actEl.innerHTML = report.actions.map((a, i) => `
+    <div class="action-item">
+      <div class="action-num">${i + 1}</div>
+      <div class="action-text">
+        <strong>${a.title}</strong>
+        <span>${a.detail}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Start load timer when loading screen appears
+const origShow = show;
+</script>
+</body>
+</html>
